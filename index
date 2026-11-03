@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Google Analytics分析模擬考</title>
+<style>
+:root{--bg:#FCECDD;--card:#FFFAF5;--fg:#2B160C;--muted:#8A5A3E;--pri:#FF6701;--pri2:#E25E3E;--soft:#FFC288;--tint:#FFF1E3;--ok:#2F7D4F;--okbg:#EAF5EC;--bad:#C63D2F;--badbg:#FBE3DE;--line:#FFC288}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","Microsoft JhengHei",sans-serif;background:radial-gradient(1200px 600px at 100% -10%,#FFBB5C33,transparent 60%),radial-gradient(900px 500px at -10% 110%,#FF9B5033,transparent 60%),var(--bg);background-attachment:fixed;color:var(--fg);line-height:1.6}
+.wrap{max-width:720px;margin:0 auto;padding:16px}
+header{padding:14px 0 6px}
+h1{font-size:1.3rem;margin:0;background:linear-gradient(90deg,#C63D2F,#FF6701 55%,#FEA82F);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:.02em}
+.card{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 10px 30px -12px rgba(198,61,47,.25);border:1px solid #FFC28866;margin-top:14px}
+.muted{color:var(--muted);font-size:.9rem}
+.btn{display:inline-block;border:0;border-radius:10px;padding:11px 16px;font-size:1rem;cursor:pointer;background:linear-gradient(135deg,#FF6701,#E25E3E);color:#fff;margin:4px 4px 4px 0;box-shadow:0 6px 16px -6px rgba(255,103,1,.55);transition:transform .15s,box-shadow .15s}
+.btn:not(:disabled):hover{transform:translateY(-1px);box-shadow:0 10px 22px -8px rgba(255,103,1,.65)}
+.btn.alt{background:var(--tint);color:#C63D2F;box-shadow:none;border:1px solid #FFC288}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.block{display:block;width:100%;text-align:left}
+.opt{display:block;width:100%;text-align:left;background:var(--card);border:2px solid var(--line);border-radius:10px;padding:12px 14px;margin:8px 0;font-size:1rem;cursor:pointer;color:var(--fg)}
+.opt:hover{border-color:#FF9B50;background:var(--tint)}
+.opt.sel{border-color:var(--pri);background:#FFE3CC}
+.opt.right{border-color:var(--ok);background:var(--okbg)}
+.opt.wrong{border-color:var(--bad);background:var(--badbg)}
+.opt:disabled{cursor:default}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+.bar>div{height:100%;background:linear-gradient(90deg,#FEA82F,#FF6701,#C63D2F);transition:width .3s}
+.qno{font-size:.9rem;color:var(--muted);margin-bottom:6px}
+.qtext{font-size:1.05rem;font-weight:600;white-space:pre-wrap}
+.exp{margin-top:12px;padding:12px;background:var(--tint);border-left:4px solid #FF9B50;border-radius:10px;font-size:.95rem;white-space:pre-wrap;display:none}
+.exp.show{display:block}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-top:12px}
+.seg{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.seg label{flex:1 1 140px;border:2px solid var(--line);border-radius:10px;padding:10px;cursor:pointer}
+.seg input{margin-right:6px}
+.seg label:has(input:checked){border-color:var(--pri);background:#FFE3CC}
+input[type=radio],input[type=checkbox]{accent-color:#FF6701}
+.score{font-size:2.4rem;font-weight:700;background:linear-gradient(90deg,#C63D2F,#FF6701,#FEA82F);-webkit-background-clip:text;background-clip:text;color:transparent;text-align:center;margin:8px 0}
+.rev{border-top:1px solid var(--line);padding:12px 0}
+.rev .tag{display:inline-block;font-size:.8rem;padding:2px 8px;border-radius:6px;margin-right:6px}
+.tag.w{background:var(--badbg);color:var(--bad)}
+.tag.r{background:var(--okbg);color:var(--ok)}
+.hidden{display:none!important}
+@media (max-width:480px){.wrap{padding:10px}.card{padding:14px}.btn{padding:10px 12px}.score{font-size:2rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><h1>Google Analytics分析模擬考</h1><div class="muted">共 50 題，來源：考古題</div></header>
+
+<!-- 首頁 -->
+<section id="home" class="card">
+  <div><b>作答模式</b></div>
+  <div class="seg">
+    <label><input type="radio" name="mode" value="immediate" checked>逐題對答案<div class="muted">作答後立即顯示對錯與解析</div></label>
+    <label><input type="radio" name="mode" value="exam">考完再對答案<div class="muted">像正式考試，交卷後一次看結果</div></label>
+  </div>
+  <div style="margin-top:12px"><b>題數</b></div>
+  <div class="seg">
+    <label><input type="radio" name="count" value="10">10 題</label>
+    <label><input type="radio" name="count" value="20">20 題</label>
+    <label><input type="radio" name="count" value="50" checked>全部 50 題</label>
+  </div>
+  <label class="muted"><input type="checkbox" id="shuffle" checked> 隨機排列題目與選項</label>
+  <div class="row">
+    <button class="btn" id="startBtn">開始考試</button>
+    <button class="btn alt" id="wrongBtn">只練錯題</button>
+  </div>
+  <div class="muted" id="wrongInfo"></div>
+  <div class="row"><button class="btn alt" id="clearBtn">清除錯題紀錄</button></div>
+</section>
+
+<!-- 作答 -->
+<section id="quiz" class="card hidden">
+  <div class="row" style="margin-top:0"><span class="muted" id="progText"></span><button class="btn alt" id="quitBtn" style="padding:6px 10px">結束</button></div>
+  <div class="bar"><div id="progBar" style="width:0%"></div></div>
+  <div class="qno" id="qno" style="margin-top:14px"></div>
+  <div class="qtext" id="qtext"></div>
+  <div id="opts"></div>
+  <div class="exp" id="exp"></div>
+  <div class="row">
+    <span></span>
+    <button class="btn" id="nextBtn" disabled>下一題</button>
+  </div>
+</section>
+
+<!-- 結果 -->
+<section id="result" class="card hidden">
+  <div class="muted" style="text-align:center">本次成績</div>
+  <div class="score" id="scoreText"></div>
+  <div class="muted" id="scoreSub" style="text-align:center"></div>
+  <div class="row" style="justify-content:center">
+    <button class="btn" id="retryBtn">再考一次</button>
+    <button class="btn alt" id="reviewBtn">檢視所有解析</button>
+    <button class="btn alt" id="backBtn">回首頁</button>
+  </div>
+  <div id="reviewList"></div>
+</section>
+</div>
+
+<script>
+const BANK = [
+[ "如要判斷使用者透過哪個來源 (例如「自然搜尋」或「參照連結網址」等) 前往你的網站，應該使用什麼維度？", ["應該使用網頁標題與畫面類別。","應該使用工作階段來源/媒介。","應該使用 Google Ads 廣告活動。","應該使用工作階段主要管道群組 (預設管道群組)。"], 1, "「工作階段來源/媒介」會記錄每一次造訪是從哪裡來的，例如 google / organic（自然搜尋）、facebook.com / referral（參照連結網址），能直接判斷使用者前往網站的來源，是分析流量來源最基本的維度。「工作階段主要管道群組」是 GA 依來源/媒介規則再歸納出的大分類，屬於彙整後的結果。網頁標題與畫面類別看的是造訪了哪些頁面，Google Ads 廣告活動只涵蓋付費廣告流量，都無法回答使用者從哪個來源進站。" ],
+[ "你能在「即時」報表中看到哪些資訊？", ["過去 60 分鐘內發生的事件","過去 12 小時內發生的事件","過去 30 分鐘內發生的事件","過去 8 小時內發生的事件"], 2, "「即時」報表顯示的是過去 30 分鐘內的使用者和事件，可以用來確認新上線的活動、代碼或事件是否正常觸發。60 分鐘、8 小時、12 小時都不是即時報表的時間範圍。" ],
+[ "你建立了新的選項，讓使用者能在網站上訂閱電子報。你想將這類新的訂閱事件標示為重要事件，並將已訂閱的使用者建立為新的目標對象。你可以在 Google Analytics 4 資源的哪個部分管理重要事件與目標對象？", ["報表","探索","廣告","管理"], 3, "重要事件和目標對象都屬於資源設定，要到「管理」裡的資料顯示區塊建立與管理。「報表」和「探索」是用來分析資料的地方；「廣告」專區看的是歸因和廣告成效，都不是管理設定的位置。" ],
+[ "哪項 Analytics 360 功能可讓你結合多個來源資源的資料來建立新資料集，以便跨產品、品牌或區域綜覽業務成效？", ["資料串流","綜覽資源","組織","子資源"], 1, "「綜覽資源」（Roll-up property）是 Analytics 360 功能，可以把多個來源資源的資料合併成一個新資料集，方便跨品牌、產品線或區域看整體業務成效。「子資源」剛好相反，是從一個資源篩出部分資料；「資料串流」是資源的資料來源；「組織」是管理多個帳戶的上層結構。" ],
+[ "由於你設定了網站資料串流，網站已經能為 Google Analytics 資源提供資料。你發現網站資料串流啟用了加強型評估功能。啟用這項設定會產生什麼影響？", ["行動應用程式中的事件可與現有網站資料結合","網站資料串流的轉換報表會使用機器學習技術，將功勞分配給不同管道","系統會從網站收集更多事件，你不必修改網站程式碼","事件可與已登入的使用者建立關聯，以便啟用跨裝置報表"], 2, "加強型評估會自動收集網頁捲動、外連點擊、站內搜尋、影片互動、檔案下載等常見事件，不需要修改網站程式碼。它不會合併應用程式資料，也不負責歸因或跨裝置識別。" ],
+[ "你的團隊想要監控網站流量出現的非預期陡升或驟降，Google Analytics 的哪項內建功能可以醒目顯示這些事件？", ["「以數據為準歸因」可醒目顯示這些事件。","「Google AI」可醒目顯示這些事件。","「機器學習」可醒目顯示這些事件。","「異常偵測」可醒目顯示這些事件。"], 3, "「異常偵測」會用統計模型找出與預期明顯不同的數據，例如流量突然陡升或驟降，並在「深入分析」中醒目提示。以數據為準歸因是分配轉換功勞的模式；「Google AI」和「機器學習」是技術名稱，不是這個功能的名字。" ],
+[ "如要在報表中查看顧客獎勵計畫的會員狀態，應該將自訂維度的範圍設為下列何者？", ["項目","工作階段","使用者","活動"], 2, "會員狀態描述的是「這個人」的特性，而且在不同工作階段之間不太會變，所以自訂維度的範圍要設為「使用者」。「事件」範圍只描述單一次行為；「項目」範圍用來描述電子商務中的商品。題目選項中的「工作階段」目前並不是 GA4 自訂維度可選的範圍。" ],
+[ "你經營的小公司有一個網站，以及兩個分別適用於 iOS 和 Android 裝置的應用程式。如果你的目標是跨這三者分析事件和使用者，該如何設定帳戶？", ["一項資源再加上兩個資料串流，一個用於網站，另一個用於應用程式","一項資源再加上三個資料串流，一個用於網站，兩個分別用於 iOS 和 Android 應用程式","一項資源加上一個用於網站的網站資料串流，另一項資源加上兩個應用程式資料串流，其中一個用於 iOS，一個則用於 Android","一項資源加上一個用於網站的網站資料串流，另一項資源加上一個用於應用程式的應用程式資料串流"], 1, "GA4 的設計是一個資源可以包含多個資料串流。要跨網站、iOS 和 Android 分析同一批使用者，就用一個資源，搭配三個資料串流：網站一個、iOS 和 Android 應用程式各一個。拆成兩個資源的話，資料會分散，無法整合分析；應用程式資料串流也要依平台分開建立。" ],
+[ "以下哪項探索技巧可讓你以圖表呈現使用者完成某件要務或重要轉換前採取的步驟，並確定他們完成或不完成各個步驟的情況？", ["區隔重疊能以圖表呈現這些步驟。","漏斗探索能以圖表呈現這些步驟。","任意形式報表能以圖表呈現這些步驟。","同類群組探索能以圖表呈現這些步驟。"], 1, "「漏斗探索」會把使用者完成目標前的每個步驟畫成圖表，顯示各步驟的完成率和流失率，看出使用者卡在哪一步。區隔重疊看的是不同區隔之間的交集；任意形式是自由組合的表格和圖表；同類群組探索追蹤的是同一批使用者隨時間的留存。" ],
+[ "你可以使用這項 Analytics 功能將自己的 ID 與個別顧客建立關聯，針對顧客在不同平台和裝置上的各種互動連結他們的行為。", ["目標對象觸發條件","裝置 ID","預測目標對象","User-ID"], 3, "User-ID 讓你把自己系統裡的顧客 ID（例如會員編號）傳給 GA，讓同一位顧客在不同裝置和平台上的行為能串在一起分析。裝置 ID 只能辨識單一裝置；目標對象觸發條件和預測目標對象都和辨識使用者身分無關。" ],
+[ "如果想篩選資料並針對特定用途或目標對象建立新資料集，該使用下列哪項 Analytics 360 功能？", ["組織","資料串流","子資源","綜覽資源"], 2, "「子資源」（Subproperty）是 Analytics 360 功能，可以從來源資源篩出特定資料，建立給特定用途或團隊使用的新資料集，也能控制誰看得到。「綜覽資源」是把多個資源合併；「組織」和「資料串流」不是用來篩選資料的。" ],
+[ "你想根據貴商家適用的參數 (例如曾購物的使用者) 區隔使用者，為電子商務網站建立新目標對象。以下哪種做法可以產生預測目標對象？", ["你將曾把商品加進購物願望清單的使用者建立為目標對象","你將未來七天內可能購物的使用者建立為目標對象","你將曾開始結帳但沒有完成購物的使用者建立為目標對象","你將過去 30 天內曾購物的使用者建立為目標對象"], 1, "預測目標對象是依 GA 的預測指標（購買機率、流失機率、預測收益）建立的，特徵是「預測未來會發生什麼」。「未來七天內可能購物的使用者」正是依購買機率建立。其他選項都是根據使用者「已經做過」的行為（加入願望清單、放棄結帳、曾購物）建立，屬於一般目標對象。" ],
+[ "你已進入 Google Analytics 資源的「探索」專區，想要以表格格式自訂指標和維度，該使用以下哪項探索技巧？", ["任意形式","同類群組探索","漏斗探索","區隔重疊"], 0, "「任意形式」探索可以自由拖曳維度和指標，以表格（交叉分析表）或其他圖表呈現，最適合自訂表格。同類群組探索看的是留存；漏斗探索看的是步驟流失；區隔重疊看的是區隔交集。" ],
+[ "你想瞭解新使用者在開啟首頁後最常瀏覽的網頁，就在「探索」中建立新的路徑探索，並打算與同事分享。誰預設能看到這項路徑探索？", ["只有你能看到，但可以在唯讀模式中與其他資源使用者分享。","資源的所有使用者都能在唯讀模式中看到新的路徑探索。","資源的所有使用者都能看到新的路徑探索並加以編輯。","只有你能看到，但你可以分享給其他資源使用者，供他們進行編輯。"], 0, "在「探索」中建立的內容，預設只有建立者本人看得到。你可以把它分享給同一資源的其他使用者，但對方只能以唯讀模式檢視，不能直接編輯；如果要修改，需要自己複製一份。" ],
+[ "你針對自家網站和行動應用程式建立了 Google Analytics 4 資源。當使用者與網站和應用程式互動時，Google Analytics 會如何評估和記錄各種使用者互動？", ["視為工作階段","視為事件","視為觀看","視為命中"], 1, "GA4 以「事件」為基礎的資料模型，會把使用者的每一個互動（瀏覽網頁、點擊、捲動、購買等）都記錄成事件。「命中」和以工作階段為主的模型是舊版通用 Analytics 的概念；「觀看」不是 GA 的資料單位。" ],
+[ "如果想在左側導覽面板建立新的報表，只顯示來源/媒介是桌上型電腦使用者的詳細資料，該使用哪種新的報表範本？", ["使用「到達網頁」範本。","使用「流量開發」範本。","使用「客層詳情」範本。","使用「技術詳情」範本。"], 1, "「流量開發」報表的主要內容就是來源/媒介等流量來源資訊。以這個範本為基礎，再加上「裝置類別 = 桌上型電腦」的篩選，就能做出題目要的報表。到達網頁範本以網頁為主；客層詳情看年齡、性別、地區；技術詳情看裝置、瀏覽器、作業系統，都不是以來源/媒介為核心。" ],
+[ "當你檢視「獲取新客」報表和「流量開發」報表時，這兩份報表醒目顯示的資訊有何差異？", ["「獲取新客」報表會顯示將使用者帶往網站的第一個廣告活動/來源/媒介。「流量開發」報表會顯示工作階段的廣告活動/來源/媒介。","「獲取新客」報表會顯示工作階段的第一個廣告活動/來源/媒介。「流量開發」報表會顯示最終接觸的廣告活動/來源/媒介。","「流量開發」報表使用以數據為準歸因模式，呈現將使用者帶往網站的廣告活動/來源/媒介。「獲取新客」報表會顯示最終接觸的廣告活動/來源/媒介。","「流量開發」報表會顯示將使用者帶往網站的第一個廣告活動/來源/媒介。「獲取新客」報表會顯示工作階段的廣告活動/來源/媒介。"], 0, "「獲取新客」報表看的是「使用者層級」，顯示第一次把使用者帶來的廣告活動/來源/媒介（首次使用者來源）。「流量開發」報表看的是「工作階段層級」，顯示每一個工作階段是從哪裡來的。簡單記法：獲取新客問「這個人最早從哪來」，流量開發問「這次造訪從哪來」。" ],
+[ "若想在表格報表中並列顯示多組資料以利於檢閱，可以選取 Google Analytics 介面中的哪個元件？", ["選取「比較項目」。","選取「篩選器」。","選取「日期挑選器」。","選取「區隔」。"], 0, "「比較項目」可以在報表中同時套用多組條件（例如手機與電腦、台灣與日本），讓不同組資料並列顯示，方便直接比較。篩選器只會留下符合條件的資料，不會並列；日期挑選器用來改時間範圍；區隔主要用在「探索」中。" ],
+[ "如果你管理的網誌有多位作家，你可以使用什麼來記錄每個文章頁面上相關作家的姓名？", ["自訂維度","自訂表格","自訂使用者參數","自訂指標"], 0, "作家姓名是描述文章頁面的「屬性文字」，不是可以加總的數字，所以要用「自訂維度」記錄，通常透過事件參數傳送後，再在 GA 註冊成自訂維度。自訂指標用來記錄數字；自訂表格和自訂使用者參數都不是 GA 的功能名稱。" ],
+[ "Google Analytics 的哪項功能仰賴 Google AI 和機器學習技術，來評估無法直接觀察得知的轉換情形？", ["轉換回溯期功能可評估轉換情形。","歸因路徑功能可評估轉換情形。","重要事件模擬功能可評估轉換情形。","轉換事件功能可評估轉換情形。"], 2, "因為隱私設定或 Cookie 限制，有些轉換無法直接觀察。GA 會運用 Google AI 和機器學習做「重要事件模擬（轉換模擬）」，估計這些無法觀察到的轉換，讓報表更完整。轉換回溯期是設定歸因的時間範圍；歸因路徑是一份報表；轉換事件只是被標示為轉換的事件，本身不做估算。" ],
+[ "你正在設定 Google Analytics，過程中必須設定資料串流。以下何者符合對資料串流的描述？", ["資料串流會在帳戶內運作，做為容器來儲存你從應用程式和網站收集到的資料","資料串流會在「探索」內運作，定義完成後可加進任何探索","資料串流會在「報表」內運作，可讓你區隔和比較資料","資料串流會在資源內運作，負責提供來自應用程式和網站的資料"], 3, "資料串流位於「資源」之下，是資料的來源，負責把網站或應用程式的資料送進資源。帳戶底下是資源，不是資料串流，所以第一個選項層級不對。資料串流也不在「探索」或「報表」裡運作。" ],
+[ "貴商家有網站和應用程式，你想要分析這兩種平台的使用者歷程，並瞭解新使用者如何進入網站和應用程式。該使用以下何者來獲得這類洞察資料？", ["Google Analytics Admin API","使用 Google Marketing Platform。","Firebase","Google Analytics 4 資源"], 3, "GA4 資源可以同時接收網站和應用程式的資料串流，所以能在同一個地方分析跨平台的使用者歷程，看新使用者如何進入網站和應用程式。Admin API 用來以程式管理帳戶設定；Firebase 主要服務應用程式開發；Google Marketing Platform 是整套產品的總稱，不是分析使用者歷程的具體工具。" ],
+[ "你的同事自訂了一份報表，希望該報表能清晰明瞭。他們應該在哪個位置新增報表，才能讓該報表出現在左側導覽面板？", ["新增至「探索」。","新增至「素材資源庫」。","新增至「管理」。","新增至「集合」。"], 3, "報表的左側導覽面板是由「集合」和其中的主題組成的。把自訂報表加到集合裡並發布後，它才會出現在左側導覽面板。「探索」是另一個分析區；「素材資源庫」用來管理報表和集合，本身不是導覽面板；「管理」是設定區。" ],
+[ "目標對象觸發條件可讓你執行什麼動作？", ["根據滿足的目標對象規則建立新事件","根據預測指標建立新目標對象","根據觸發的特定事件建立新目標對象","根據現有事件參數建立新事件"], 0, "目標對象觸發條件會在使用者符合某個目標對象的條件時，自動觸發一個新事件（例如使用者成為「高價值顧客」時觸發事件）。這個事件之後可以標示為重要事件或用來分析。其他選項描述的是預測目標對象、依事件建立目標對象、依參數建立事件，都不是目標對象觸發條件的用途。" ],
+[ "使用者觀看影片時，會在你的網站上觸發事件。以下何者是事件參數？", ["在網站上觀看影片的使用者人數","在網站上觀看的影片名稱","使用者在網站上觀看影片時所用的裝置","有多少使用者點開影片所在的網頁"], 1, "事件參數是附加在事件上、補充說明這次事件的細節。以影片事件來說，「觀看的影片名稱」就是這次事件的參數。觀看人數和點開網頁的人數是指標；使用者所用的裝置是 GA 自動收集的裝置維度，不是這個影片事件本身的參數。" ],
+[ "以下哪項描述符合 Google Analytics 與 Google Ads 完成連結後，Google Analytics 轉換事件在 Google Ads 中的使用方式？", ["Google Ads 可運用轉換事件調整和改善廣告文案。","Google Ads 可運用轉換事件改善廣告刊登位置的出價。","Google Ads 可運用轉換事件建立新的關鍵字提案。","Google Ads 可運用轉換事件呈現業界基準化資料。"], 1, "GA 與 Google Ads 連結後，可以把 GA 的重要事件（轉換）匯入 Google Ads。智慧出價就能根據這些轉換資料調整出價，讓廣告在更可能帶來轉換的競價中出更合適的價格。GA 轉換不會用來改寫廣告文案、產生關鍵字提案或提供業界基準資料。" ],
+[ "如果想深入瞭解哪些自然搜尋查詢會將使用者帶往你的網站，該將哪個平台連結至 Analytics？", ["Search Ads 360","Firebase","Google Ads","Search Console"], 3, "Search Console 提供 Google 自然搜尋的查詢字詞、曝光、點擊和平均排名。連結到 GA 後，就能看到哪些自然搜尋查詢帶來網站流量，以及這些使用者後續的行為。Search Ads 360 和 Google Ads 是付費廣告平台；Firebase 是應用程式開發平台。" ],
+[ "你想要針對標準表格報表中的資料進行深入的細項分析，你該選取哪項功能？", ["選取「次要維度」。","選取「篩選器」。","選取「比較項目」。","選取「細目」。"], 0, "「次要維度」可以在標準表格報表的主要維度旁邊再加一個維度，把資料切得更細，例如在來源/媒介旁加上裝置類別。篩選器是排除資料，比較項目是並列多組資料；GA 報表中沒有叫「細目」的功能。" ],
+[ "為了瞭解來自電腦或手機等裝置的使用者人數，你製作了一份報表，列出過去 30 天各裝置類型的人數資料。在這份報表中，裝置類型是什麼？", ["維度","使用者","事件","指標"], 0, "裝置類型（電腦、手機、平板）是用來分類資料的屬性，所以是「維度」。使用者人數是用來計算的數字，屬於「指標」。記法：維度回答「是什麼」，指標回答「有多少」。" ],
+[ "當你想確定使用者在產品詳細資料頁面上的行為，是否會因為裝置類型而有所不同時，應該提取哪種報表？", ["應該提取「獲取新客」報表。","應該提取「網頁和畫面」報表。","應該提取「技術詳情」報表。","應該提取「事件」報表。"], 1, "要分析的是「產品詳細資料頁面」上的行為，應該提取以網頁為主的「網頁和畫面」報表，再用「裝置類別」做比較或加上次要維度。「技術詳情」報表以裝置、瀏覽器、作業系統為主，看不到個別頁面的行為。「獲取新客」看流量來源，「事件」報表以事件為主，都不是以頁面為分析單位。" ],
+[ "你打算建立資訊主頁，以檢視分析資料及其他業務應用程式中的店內顧客購買資料。此時該使用 Google Analytics 的哪項功能？", ["Measurement Protocol","Data API","Firebase SDK","Admin API"], 1, "「Data API」讓你用程式讀取 GA 報表資料，再和其他業務系統（例如店內購買資料）一起放進自己的資訊主頁呈現。Measurement Protocol 是把資料「送進」GA，方向相反；Firebase SDK 用來在應用程式中收集資料；Admin API 用來管理帳戶和資源設定。" ],
+[ "使用者會透過搜尋引擎結果和社群媒體等多種管道，找出並造訪你的網站。你可以透過 Google Analytics「報表」頁面的哪個部分，進一步瞭解使用者是從哪裡造訪網站？", ["參與度","客層","獲客","營利"], 2, "「獲客」區塊（包含獲取新客和流量開發報表）專門說明使用者是從哪些管道來到網站，例如搜尋引擎、社群媒體或廣告。參與度看使用者造訪後做了什麼；客層看使用者是誰；營利看收益和購買。" ],
+[ "每當有網站訪客在你的網站上瀏覽網頁時，就會觸發 page_view 事件，但你的團隊想定義會在訪客進入特定網頁 (例如首頁) 時觸發的新事件。那麼在 Google Analytics 介面中前往「事件」後，他們該選擇哪個選項？", ["應該選擇「標示為重要事件」。","應該選擇「修改事件」。","應該選擇「建立事件」。","應該選擇「匯入事件」。"], 2, "要依照既有的 page_view 事件和條件（例如網頁位置等於首頁）定義一個全新的事件，應該在「事件」中選擇「建立事件」。「修改事件」是更改已經存在的事件；「標示為重要事件」是把事件設成轉換；「匯入事件」不是這個介面的操作。" ],
+[ "如要將 Google Analytics 資源連結至 BigQuery，選擇資料的匯出頻率時會看到兩個選項，分別是？", ["兩個選項分別為「每小時」和「串流」。","兩個選項分別為「每日」和「每週」。","兩個選項分別為「每日」和「串流」。","兩個選項分別為「每週」和「串流」"], 2, "GA 連結 BigQuery 時，匯出頻率有兩種：「每日」（每天匯出一次完整資料）和「串流」（幾分鐘內即時匯出）。每小時或每週都不是可選的頻率。" ],
+[ "你有一個網站，且想要開始在 Google Analytics 中收集和記錄網站的洞察資料。你該先設定什麼？", ["Analytics 代碼","Google Ads","Firebase SDK","Analytics SDK"], 0, "網站要開始把資料送進 GA，第一步是建立網站資料串流，並在網站上安裝 Analytics 代碼（Google 代碼 gtag.js，或透過 Google 代碼管理工具）。Firebase SDK 和 Analytics SDK 是給應用程式用的；Google Ads 是廣告平台，和收集網站資料無關。" ],
+[ "你的網站上有許多很有價值的事件，例如使用者購買商品或訂閱電子報。你想將這些事件標示為重要事件，你在 Google Analytics 4 資源中該將這些事件標示為什麼？", ["自動事件","自訂事件","建議事件","重要事件"], 3, "在 GA4 中，對業務有價值的事件（例如購買、訂閱電子報）要標示為「重要事件」，也就是舊稱的轉換事件，才能在報表中追蹤這些關鍵行為的成效。自動事件、建議事件、自訂事件描述的是事件的來源或類型，不是用來標示事件重要性的設定。" ],
+[ "你的團隊想要在 Google Analytics 資源中變更「獲取新客」報表的預設主要維度，他們可以怎麼做？", ["使用自訂功能來編輯內建報表。","選擇新的主要維度。","為報表新增自訂維度。","以新的主要維度建立探索。"], 0, "「獲取新客」是內建報表，要改變它的預設主要維度，可以用報表右上角的「自訂報表」功能編輯內建報表，儲存後就會成為新的預設。只在報表上臨時選另一個主要維度不會改變預設；新增自訂維度或建立探索也不會改變內建報表本身。" ],
+[ "以下哪些功能可用於控制 Google Analytics 儲存使用者層級和事件層級資料的時間？", ["同意聲明模式","停用資料收集功能","資料保留期限","IP 位址設定"], 2, "「資料保留期限」設定決定 GA 保留使用者層級和事件層級資料的時間（例如 2 個月或 14 個月），過期後這些資料就無法在探索中使用。同意聲明模式依使用者的 Cookie 同意狀態調整資料收集方式；停用資料收集是完全不收；IP 位址設定和保留時間無關。" ],
+[ "你透過 POS 系統收集的資料，可與自家網站和應用程式傳送至 Google Analytics 的資料相輔相成。以下哪項功能可用於收集事件並直接傳送至 Google Analytics 伺服器？", ["Measurement Protocol","HTTP 要求","資料匯入","修改事件"], 0, "Measurement Protocol 讓你從伺服器或 POS 系統這類離線環境，直接用 HTTP 要求把事件傳送到 GA 伺服器，和網站、應用程式的資料整合。「HTTP 要求」只是傳輸方式，不是 GA 的功能名稱；資料匯入是上傳檔案，不是即時傳送事件；修改事件只能調整已收到的事件。" ],
+[ "在「探索」中建立購物漏斗時，你可以透過哪些維度選擇首頁瀏覽？", ["你可以透過「網頁類型」選取首頁瀏覽。","你可透過「網頁路徑與畫面類別」選擇首頁瀏覽。","你可透過「購買」選擇首頁瀏覽。","你可透過「首頁名稱」選擇首頁瀏覽。"], 1, "在「探索」中建立漏斗時，要以「網頁路徑與畫面類別」這個維度來指定首頁（例如路徑等於 /）。GA 沒有「網頁類型」或「首頁名稱」這種預設維度；「購買」是事件，不是用來選頁面的維度。" ],
+[ "將 Google Analytics 資料匯出至 BigQuery 後，你可以如何運用資料？", ["你可以透過 SQL 查詢資料來找出問題解答，並取得有關產品、使用者和通路的洞察資訊","你可以查看當機資料、通知成效和深層連結成效等應用程式專屬報表","你可以根據轉換次數設定廣告活動出價，並使用目標對象功能來指定廣告活動的目標對象","你可以使用目標對象功能來指定網站實驗的目標對象，並測試網頁的變化版本"], 0, "把 GA 資料匯出到 BigQuery 後，可以取得未經取樣的原始事件資料，用 SQL 自由查詢，並和其他資料來源合併，深入分析產品、使用者和通路。應用程式當機報表屬於 Firebase Crashlytics；廣告出價要在 Google Ads 設定；網站實驗則要用其他測試工具。" ],
+[ "Google Ads 連結至 Google Analytics 後，如何運用 Google Analytics 目標對象？", ["可聯絡 Google Ads 目標對象以進行顧客研究","Google Ads 目標對象可用來指定廣告活動的目標對象","Google Ads 目標對象可用來調整廣告活動的指定地理區域","Google Ads 目標對象可用來查看業界基準化資料"], 1, "GA 與 Google Ads 連結後，GA 建立的目標對象會分享到 Google Ads，可以直接用來指定廣告活動的目標對象，例如再行銷給曾放棄購物車的使用者。它不能用來聯絡使用者做研究、調整地理區域或查看業界基準。" ],
+[ "你是五金行老闆，在自家網站上發布了一部新的步驟影片，方便顧客瞭解如何正確使用你所銷售的工具。Google Analytics 針對使用者與這部影片的互動提供了許多相關資料。以下何者算是 Google Analytics 收集的「使用者屬性」？", ["網站上可觀看影片的名稱","有多少使用者點開影片所在的網頁","影片觀看人數","影片觀眾的語言偏好設定"], 3, "使用者屬性描述的是使用者本身的特性，例如語言偏好、所在國家、年齡層。「影片觀眾的語言偏好設定」就是使用者屬性。影片名稱是事件參數；點開網頁的人數和觀看人數則是指標。" ],
+[ "如果為資源啟用了廣告個人化功能，但想排除特定事件，這些排除事件的資料會受到什麼影響？", ["該資料只會用於 Google Ads 目標對象","該資料只會在「報表」和「探索」專區中提供","該資料只會用於評估用途","該資料只會在「廣告」專區中提供"], 2, "在啟用廣告個人化的資源中排除特定事件後，這些事件的資料仍會正常收集，但只會用於評估用途，例如報表和分析，不會用來做廣告個人化。這樣可以兼顧分析需求和隱私要求。" ],
+[ "為了瞭解過去 30 天使用者來自哪些類型的裝置 (如電腦或手機)，你製作了一份報表。在這份報表中，以下何者算是 Google Analytics 的「指標」？", ["手機的使用者人數","裝置類型：電腦和手機","使用者進入網站的管道","過去 30 天的資料範圍設定"], 0, "指標是可以計算的數字，「手機的使用者人數」就是一個數值，屬於指標。「裝置類型：電腦和手機」和「使用者進入網站的管道」是用來分類的維度；「過去 30 天」只是報表的日期範圍設定，不是指標。" ],
+[ "可在任意形式報表中包含哪些可用的圖表類型？", ["圓餅圖、圓環圖、地理區域地圖、圓形圖","折線圖、長條圖、直方圖、地理區域地圖","表格、折線圖、散布圖、長條圖","表格、折線圖、圓形圖、圓環圖"], 2, "任意形式探索支援的圖表類型包括：表格、圓環圖、折線圖、散布圖、長條圖和地理區域地圖。四個選項中，只有「表格、折線圖、散布圖、長條圖」全部都是支援的類型。其他選項都混入了不支援的類型，例如圓餅圖、直方圖或「圓形圖」。" ],
+[ "如需有助於進一步深入分析顧客參與度的進階技巧，你該開啟 Google Analytics 資源的哪個專區？", ["開啟「廣告」專區。","開啟「管理」專區。","開啟「探索」專區。","開啟「報表」專區。"], 2, "「探索」提供任意形式、漏斗、路徑、區隔重疊、同類群組等進階分析技巧，可以深入分析顧客參與度。「報表」是標準化的現成報表，比較不適合深入分析；「廣告」看的是歸因；「管理」是設定區。" ],
+[ "你發現 Google Analytics 資源有資料不一致的問題，想試著進行疑難排解，你可以使用下列哪一個維度來找出異常狀況或可能存在的問題？", ["使用項目名稱、裝置類別、日期。","使用 OS 版本、作業系統與版本、重要事件。","使用網頁路徑、螢幕解析度、項目名稱。","使用國家/地區、OS 版本、作業系統與版本。"], 3, "資料不一致時，常見的做法是依地區和系統環境切分資料：國家/地區可以看出是否有特定地區的異常流量，OS 版本、作業系統與版本則能找出特定版本的追蹤問題或錯誤。其他選項混入了項目名稱、重要事件、螢幕解析度等較難看出追蹤異常的欄位。" ],
+[ "你想查看常見問題解答的現成資訊卡，以便瞭解使用者如何與應用程式或網站互動。你該前往哪個專區才能找到這類資訊卡？", ["可以在「廣告」專區找到這類資訊卡。","可以在「管理」專區找到這類資訊卡。","可以在「探索」專區找到這類資訊卡。","可以在「報表」專區找到這類資訊卡。"], 3, "「報表」專區首頁與報表總覽中，有回答常見問題的現成資訊卡，例如「使用者從哪裡來」、「哪些網頁最多人看」，可以快速了解使用者如何與網站或應用程式互動。「探索」需要自己建立分析；「廣告」和「管理」沒有這類摘要資訊卡。" ],
+[ "你想瞭解已放送的不同廣告如何在轉換路徑上共同運作，因此決定查看「歸因路徑」報表。你可以在 Google Analytics 4 資源中的哪個位置找到這份報表？", ["如要查看報表，請前往「報表」。","如要查看報表，請前往「管理」。","如要查看報表，請前往「廣告」。","如要查看報表，請前往「探索」。"], 2, "「歸因路徑」報表位於「廣告」專區，和模式比較等歸因相關報表放在一起，用來了解不同管道和廣告在轉換路徑上如何共同貢獻。它不在一般的「報表」專區，也不在「探索」或「管理」。" ]
+];
+
+const LS_KEY = "ga_quiz_wrong_v1";
+const $ = id => document.getElementById(id);
+const show = (id) => { ["home","quiz","result"].forEach(s => $(s).classList.toggle("hidden", s !== id)); };
+const shuffle = a => { for (let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
+const getWrong = () => { try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; } catch(e){ return []; } };
+const setWrong = arr => { try { localStorage.setItem(LS_KEY, JSON.stringify(arr)); } catch(e){} };
+
+let session = null;
+
+function refreshHome(){
+  const w = getWrong();
+  $("wrongInfo").textContent = w.length ? `目前錯題共 ${w.length} 題` : "目前沒有錯題紀錄";
+  $("wrongBtn").disabled = w.length === 0;
+}
+
+function startSession(ids, mode, randomize){
+  if (randomize) shuffle(ids);
+  session = {
+    mode, ids,
+    perms: ids.map(id => { const p=[0,1,2,3]; return randomize ? shuffle(p) : p; }),
+    pos: 0, answers: [], // answers[k] = chosen display index
+    results: []          // per question: {id, chosen, correct(bool)}
+  };
+  show("quiz");
+  renderQ();
+}
+
+function renderQ(){
+  const s = session, k = s.pos, id = s.ids[k], item = BANK[id], perm = s.perms[k];
+  const total = s.ids.length;
+  $("progText").textContent = `第 ${k+1} / ${total} 題`;
+  $("progBar").style.width = (k/total*100)+"%";
+  $("qno").textContent = `Q${id+1}`;
+  $("qtext").textContent = item[0];
+  $("exp").classList.remove("show"); $("exp").textContent = "";
+  const box = $("opts"); box.innerHTML = "";
+  const chosen = s.answers[k];
+  const answered = chosen !== undefined;
+  perm.forEach((origIdx, dispIdx) => {
+    const b = document.createElement("button");
+    b.className = "opt"; b.textContent = ["A","B","C","D"][dispIdx] + "．" + item[1][origIdx];
+    const correctDisp = perm.indexOf(item[2]);
+    if (answered) {
+      b.disabled = true;
+      if (s.mode === "immediate") {
+        if (dispIdx === correctDisp) b.classList.add("right");
+        if (dispIdx === chosen && chosen !== correctDisp) b.classList.add("wrong");
+      } else if (dispIdx === chosen) b.classList.add("sel");
+    } else {
+      b.onclick = () => choose(dispIdx);
+    }
+    if (answered && dispIdx === chosen && s.mode !== "immediate") b.classList.add("sel");
+    box.appendChild(b);
+  });
+  if (answered && s.mode === "immediate") {
+    $("exp").innerHTML = "";
+    const head = document.createElement("div");
+    head.innerHTML = `<b>${chosen === perm.indexOf(item[2]) ? "✔ 答對了" : "✘ 答錯了"}</b>　正確答案：${["A","B","C","D"][perm.indexOf(item[2])]}`;
+    $("exp").appendChild(head);
+    $("exp").appendChild(document.createTextNode("\n解析：" + item[3]));
+    $("exp").classList.add("show");
+  }
+  $("nextBtn").disabled = !answered;
+  $("nextBtn").textContent = k === total-1 ? (s.mode==="exam" ? "交卷" : "看結果") : "下一題";
+  if (!answered && s.mode==="exam") $("nextBtn").disabled = true;
+  if (s.mode==="exam" && answered) $("nextBtn").disabled = false;
+}
+
+function choose(dispIdx){
+  const s = session, k = s.pos;
+  if (s.answers[k] !== undefined) return;
+  s.answers[k] = dispIdx;
+  if (s.mode === "exam") { renderQ(); $("nextBtn").disabled = false; return; }
+  renderQ();
+}
+
+function nextQ(){
+  const s = session;
+  if (s.answers[s.pos] === undefined) return;
+  if (s.pos < s.ids.length-1) { s.pos++; renderQ(); }
+  else finish();
+}
+
+function finish(){
+  const s = session;
+  let correct = 0; const wrongIds = getWrong(); const rev = [];
+  s.ids.forEach((id, k) => {
+    const item = BANK[id], perm = s.perms[k];
+    const ok = s.answers[k] === perm.indexOf(item[2]);
+    if (ok) correct++;
+    if (ok) { const i = wrongIds.indexOf(id); if (i>-1) wrongIds.splice(i,1); }
+    else if (!wrongIds.includes(id)) wrongIds.push(id);
+    rev.push({k, id, ok, chosen: s.answers[k], perm});
+  });
+  setWrong(wrongIds);
+  s.review = rev;
+  $("scoreText").textContent = `${correct} / ${s.ids.length}`;
+  const pct = Math.round(correct/s.ids.length*100);
+  $("scoreSub").textContent = `正確率 ${pct}%`;
+  $("reviewList").innerHTML = "";
+  $("reviewList").classList.add("hidden");
+  show("result");
+}
+
+function renderReview(){
+  const s = session, box = $("reviewList");
+  box.innerHTML = "";
+  s.review.forEach(r => {
+    const item = BANK[r.id];
+    const d = document.createElement("div"); d.className = "rev";
+    const tag = document.createElement("span"); tag.className = "tag " + (r.ok?"r":"w"); tag.textContent = r.ok ? "答對" : "答錯";
+    d.appendChild(tag);
+    const qn = document.createElement("span"); qn.className="muted"; qn.textContent = `Q${r.id+1}`; d.appendChild(qn);
+    const qt = document.createElement("div"); qt.style.whiteSpace="pre-wrap"; qt.style.margin="6px 0"; qt.style.fontWeight="600"; qt.textContent = item[0]; d.appendChild(qt);
+    const correctDisp = r.perm.indexOf(item[2]);
+    const ans = document.createElement("div"); ans.className="muted";
+    ans.textContent = `你的答案：${r.chosen===undefined?"未作答":["A","B","C","D"][r.chosen]}　正確答案：${["A","B","C","D"][correctDisp]}`;
+    d.appendChild(ans);
+    const ex = document.createElement("div"); ex.className="exp show"; ex.textContent = item[3]; d.appendChild(ex);
+    box.appendChild(d);
+  });
+  box.classList.remove("hidden");
+}
+
+$("startBtn").onclick = () => {
+  const mode = document.querySelector('input[name=mode]:checked').value;
+  const count = parseInt(document.querySelector('input[name=count]:checked').value, 10);
+  const rnd = $("shuffle").checked;
+  let ids = BANK.map((_,i)=>i);
+  if (rnd) shuffle(ids);
+  ids = ids.slice(0, count);
+  startSession(ids, mode, false);
+};
+$("wrongBtn").onclick = () => {
+  const mode = document.querySelector('input[name=mode]:checked').value;
+  const ids = getWrong().filter(i => i>=0 && i<BANK.length);
+  if (!ids.length) return;
+  startSession(ids.slice(), mode, $("shuffle").checked);
+};
+$("clearBtn").onclick = () => { setWrong([]); refreshHome(); };
+$("nextBtn").onclick = nextQ;
+let quitTimer=null;
+$("quitBtn").onclick = () => {
+  const b=$("quitBtn");
+  if (b.dataset.arm==="1") { clearTimeout(quitTimer); b.dataset.arm=""; b.textContent="結束"; refreshHome(); show("home"); return; }
+  b.dataset.arm="1"; b.textContent="沒考完想跑啊？";
+  quitTimer=setTimeout(()=>{ b.dataset.arm=""; b.textContent="結束"; },3000);
+};
+$("retryBtn").onclick = () => {
+  const ids = session.ids.slice(), mode = session.mode;
+  startSession(ids, mode, $("shuffle").checked);
+};
+$("reviewBtn").onclick = renderReview;
+$("backBtn").onclick = () => { refreshHome(); show("home"); };
+
+refreshHome();
+show("home");
+</script>
+</body>
+</html>
