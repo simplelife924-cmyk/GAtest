@@ -7,18 +7,19 @@
 <style>
 :root{--bg:#FCECDD;--card:#FFFAF5;--fg:#2B160C;--muted:#8A5A3E;--pri:#FF6701;--pri2:#E25E3E;--soft:#FFC288;--tint:#FFF1E3;--ok:#2F7D4F;--okbg:#EAF5EC;--bad:#C63D2F;--badbg:#FBE3DE;--line:#FFC288}
 *{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","Microsoft JhengHei",sans-serif;background:radial-gradient(1200px 600px at 100% -10%,#FFBB5C33,transparent 60%),radial-gradient(900px 500px at -10% 110%,#FF9B5033,transparent 60%),var(--bg);background-attachment:fixed;color:var(--fg);line-height:1.6}
 .wrap{max-width:720px;margin:0 auto;padding:16px}
 header{padding:14px 0 6px}
 h1{font-size:1.3rem;margin:0;background:linear-gradient(90deg,#C63D2F,#FF6701 55%,#FEA82F);-webkit-background-clip:text;background-clip:text;color:transparent;letter-spacing:.02em}
-.card{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 10px 30px -12px rgba(198,61,47,.25);border:1px solid #FFC28866;margin-top:14px}
+.card{min-width:0;overflow-wrap:anywhere;background:var(--card);border-radius:14px;padding:18px;box-shadow:0 10px 30px -12px rgba(198,61,47,.25);border:1px solid #FFC28866;margin-top:14px}
 .muted{color:var(--muted);font-size:.9rem}
-.btn{display:inline-block;border:0;border-radius:10px;padding:11px 16px;font-size:1rem;cursor:pointer;background:linear-gradient(135deg,#FF6701,#E25E3E);color:#fff;margin:4px 4px 4px 0;box-shadow:0 6px 16px -6px rgba(255,103,1,.55);transition:transform .15s,box-shadow .15s}
+.btn{display:inline-block;border:0;border-radius:10px;padding:.7em 1em;font-size:1rem;max-width:100%;white-space:normal;overflow-wrap:anywhere;line-height:1.35;cursor:pointer;background:linear-gradient(135deg,#FF6701,#E25E3E);color:#fff;margin:4px 4px 4px 0;box-shadow:0 6px 16px -6px rgba(255,103,1,.55);transition:transform .15s,box-shadow .15s}
 .btn:not(:disabled):hover{transform:translateY(-1px);box-shadow:0 10px 22px -8px rgba(255,103,1,.65)}
 .btn.alt{background:var(--tint);color:#C63D2F;box-shadow:none;border:1px solid #FFC288}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 .btn.block{display:block;width:100%;text-align:left}
-.opt{display:block;width:100%;text-align:left;background:var(--card);border:2px solid var(--line);border-radius:10px;padding:12px 14px;margin:8px 0;font-size:1rem;cursor:pointer;color:var(--fg)}
+.opt{display:block;width:100%;text-align:left;background:var(--card);border:2px solid var(--line);border-radius:10px;padding:.8em .9em;margin:8px 0;line-height:1.45;overflow-wrap:anywhere;font-size:1rem;cursor:pointer;color:var(--fg)}
 .opt:hover{border-color:#FF9B50;background:var(--tint)}
 .opt.sel{border-color:var(--pri);background:#FFE3CC}
 .opt.right{border-color:var(--ok);background:var(--okbg)}
@@ -32,23 +33,23 @@ h1{font-size:1.3rem;margin:0;background:linear-gradient(90deg,#C63D2F,#FF6701 55
 .exp.show{display:block}
 .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;margin-top:12px}
 .seg{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
-.seg label{flex:1 1 140px;border:2px solid var(--line);border-radius:10px;padding:10px;cursor:pointer}
+.seg label{flex:1 1 9em;min-width:0;border:2px solid var(--line);border-radius:10px;padding:10px;cursor:pointer}
 .seg input{margin-right:6px}
 .seg label:has(input:checked){border-color:var(--pri);background:#FFE3CC}
 input[type=radio],input[type=checkbox]{accent-color:#FF6701}
-.score{font-size:2.4rem;font-weight:700;background:linear-gradient(90deg,#C63D2F,#FF6701,#FEA82F);-webkit-background-clip:text;background-clip:text;color:transparent;text-align:center;margin:8px 0}
+.score{font-size:clamp(1.8rem,8vw,2.4rem);font-weight:700;background:linear-gradient(90deg,#C63D2F,#FF6701,#FEA82F);-webkit-background-clip:text;background-clip:text;color:transparent;text-align:center;margin:8px 0}
 .rev{border-top:1px solid var(--line);padding:12px 0}
 .rev .tag{display:inline-block;font-size:.8rem;padding:2px 8px;border-radius:6px;margin-right:6px}
 .tag.w{background:var(--badbg);color:var(--bad)}
 .tag.r{background:var(--okbg);color:var(--ok)}
 .hidden{display:none!important}
-@media (max-width:480px){.wrap{padding:10px}.card{padding:14px}.btn{padding:10px 12px}.score{font-size:2rem}}
+@media (max-width:480px){.wrap{padding:10px}.card{padding:14px}.score{font-size:2rem}}
 </style>
 </head>
 <body>
 <div class="wrap">
 <header><h1>Google Analytics分析模擬考</h1><div class="muted">共 50 題，來源：考古題</div></header>
- 
+
 <!-- 首頁 -->
 <section id="home" class="card">
   <div><b>作答模式</b></div>
@@ -67,10 +68,10 @@ input[type=radio],input[type=checkbox]{accent-color:#FF6701}
     <button class="btn" id="startBtn">開始考試</button>
     <button class="btn alt" id="wrongBtn">只練錯題</button>
   </div>
-  <div class="muted" id="wrongInfo"></div>
+  <div class="muted" id="wrongInfo" style="margin:20px 0 8px;min-height:1.6em"></div>
   <div class="row"><button class="btn alt" id="clearBtn">清除錯題紀錄</button></div>
 </section>
- 
+
 <!-- 作答 -->
 <section id="quiz" class="card hidden">
   <div class="row" style="margin-top:0"><span class="muted" id="progText"></span><button class="btn alt" id="quitBtn" style="padding:6px 10px">結束</button></div>
@@ -84,7 +85,7 @@ input[type=radio],input[type=checkbox]{accent-color:#FF6701}
     <button class="btn" id="nextBtn" disabled>下一題</button>
   </div>
 </section>
- 
+
 <!-- 結果 -->
 <section id="result" class="card hidden">
   <div class="muted" style="text-align:center">本次成績</div>
@@ -92,13 +93,13 @@ input[type=radio],input[type=checkbox]{accent-color:#FF6701}
   <div class="muted" id="scoreSub" style="text-align:center"></div>
   <div class="row" style="justify-content:center">
     <button class="btn" id="retryBtn">再考一次</button>
-    <button class="btn alt" id="reviewBtn">檢視所有解析</button>
+    <button class="btn alt" id="reviewBtn">答錯什麼</button>
     <button class="btn alt" id="backBtn">回首頁</button>
   </div>
   <div id="reviewList"></div>
 </section>
 </div>
- 
+
 <script>
 const BANK = [
 [ "如要判斷使用者透過哪個來源 (例如「自然搜尋」或「參照連結網址」等) 前往你的網站，應該使用什麼維度？", ["應該使用網頁標題與畫面類別。","應該使用工作階段來源/媒介。","應該使用 Google Ads 廣告活動。","應該使用工作階段主要管道群組 (預設管道群組)。"], 1, "「工作階段來源/媒介」會記錄每一次造訪是從哪裡來的，例如 google / organic（自然搜尋）、facebook.com / referral（參照連結網址），能直接判斷使用者前往網站的來源，是分析流量來源最基本的維度。「工作階段主要管道群組」是 GA 依來源/媒介規則再歸納出的大分類，屬於彙整後的結果。網頁標題與畫面類別看的是造訪了哪些頁面，Google Ads 廣告活動只涵蓋付費廣告流量，都無法回答使用者從哪個來源進站。" ],
@@ -152,22 +153,22 @@ const BANK = [
 [ "你想查看常見問題解答的現成資訊卡，以便瞭解使用者如何與應用程式或網站互動。你該前往哪個專區才能找到這類資訊卡？", ["可以在「廣告」專區找到這類資訊卡。","可以在「管理」專區找到這類資訊卡。","可以在「探索」專區找到這類資訊卡。","可以在「報表」專區找到這類資訊卡。"], 3, "「報表」專區首頁與報表總覽中，有回答常見問題的現成資訊卡，例如「使用者從哪裡來」、「哪些網頁最多人看」，可以快速了解使用者如何與網站或應用程式互動。「探索」需要自己建立分析；「廣告」和「管理」沒有這類摘要資訊卡。" ],
 [ "你想瞭解已放送的不同廣告如何在轉換路徑上共同運作，因此決定查看「歸因路徑」報表。你可以在 Google Analytics 4 資源中的哪個位置找到這份報表？", ["如要查看報表，請前往「報表」。","如要查看報表，請前往「管理」。","如要查看報表，請前往「廣告」。","如要查看報表，請前往「探索」。"], 2, "「歸因路徑」報表位於「廣告」專區，和模式比較等歸因相關報表放在一起，用來了解不同管道和廣告在轉換路徑上如何共同貢獻。它不在一般的「報表」專區，也不在「探索」或「管理」。" ]
 ];
- 
+
 const LS_KEY = "ga_quiz_wrong_v1";
 const $ = id => document.getElementById(id);
 const show = (id) => { ["home","quiz","result"].forEach(s => $(s).classList.toggle("hidden", s !== id)); };
 const shuffle = a => { for (let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
 const getWrong = () => { try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; } catch(e){ return []; } };
 const setWrong = arr => { try { localStorage.setItem(LS_KEY, JSON.stringify(arr)); } catch(e){} };
- 
+
 let session = null;
- 
+
 function refreshHome(){
   const w = getWrong();
   $("wrongInfo").textContent = w.length ? `目前錯題共 ${w.length} 題` : "目前沒有錯題紀錄";
   $("wrongBtn").disabled = w.length === 0;
 }
- 
+
 function startSession(ids, mode, randomize){
   if (randomize) shuffle(ids);
   session = {
@@ -179,7 +180,7 @@ function startSession(ids, mode, randomize){
   show("quiz");
   renderQ();
 }
- 
+
 function renderQ(){
   const s = session, k = s.pos, id = s.ids[k], item = BANK[id], perm = s.perms[k];
   const total = s.ids.length;
@@ -215,27 +216,28 @@ function renderQ(){
     $("exp").appendChild(document.createTextNode("\n解析：" + item[3]));
     $("exp").classList.add("show");
   }
+  $("nextBtn").classList.toggle("hidden", s.mode === "exam");
   $("nextBtn").disabled = !answered;
   $("nextBtn").textContent = k === total-1 ? (s.mode==="exam" ? "交卷" : "看結果") : "下一題";
   if (!answered && s.mode==="exam") $("nextBtn").disabled = true;
   if (s.mode==="exam" && answered) $("nextBtn").disabled = false;
 }
- 
+
 function choose(dispIdx){
   const s = session, k = s.pos;
   if (s.answers[k] !== undefined) return;
   s.answers[k] = dispIdx;
-  if (s.mode === "exam") { renderQ(); $("nextBtn").disabled = false; return; }
+  if (s.mode === "exam") { nextQ(); return; }
   renderQ();
 }
- 
+
 function nextQ(){
   const s = session;
   if (s.answers[s.pos] === undefined) return;
   if (s.pos < s.ids.length-1) { s.pos++; renderQ(); }
   else finish();
 }
- 
+
 function finish(){
   const s = session;
   let correct = 0; const wrongIds = getWrong(); const rev = [];
@@ -256,11 +258,13 @@ function finish(){
   $("reviewList").classList.add("hidden");
   show("result");
 }
- 
+
 function renderReview(){
   const s = session, box = $("reviewList");
   box.innerHTML = "";
-  s.review.forEach(r => {
+  const wrong = s.review.filter(r => !r.ok);
+  if (!wrong.length) { box.innerHTML = '<div class="muted" style="margin-top:12px">恭喜歐趴！</div>'; box.classList.remove("hidden"); return; }
+  wrong.forEach(r => {
     const item = BANK[r.id];
     const d = document.createElement("div"); d.className = "rev";
     const tag = document.createElement("span"); tag.className = "tag " + (r.ok?"r":"w"); tag.textContent = r.ok ? "答對" : "答錯";
@@ -276,7 +280,7 @@ function renderReview(){
   });
   box.classList.remove("hidden");
 }
- 
+
 $("startBtn").onclick = () => {
   const mode = document.querySelector('input[name=mode]:checked').value;
   const count = parseInt(document.querySelector('input[name=count]:checked').value, 10);
@@ -307,10 +311,10 @@ $("retryBtn").onclick = () => {
 };
 $("reviewBtn").onclick = renderReview;
 $("backBtn").onclick = () => { refreshHome(); show("home"); };
- 
+
 refreshHome();
 show("home");
- 
+
 // 基本防複製（僅為阻擋一般操作，無法防止有心人士檢視原始碼）
 (function(){
   const block = e => e.preventDefault();
@@ -328,5 +332,3 @@ show("home");
 </script>
 </body>
 </html>
- 
-Claude 已完成回應
