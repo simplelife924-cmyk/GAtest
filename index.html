@@ -1,3 +1,22 @@
+Claude
+ER's MacBook，已連接
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Ga quiz · HTML
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -48,7 +67,7 @@ input[type=radio],input[type=checkbox]{accent-color:#FF6701}
 <body>
 <div class="wrap">
 <header><h1>Google Analytics分析模擬考</h1><div class="muted">共 50 題，來源：考古題</div></header>
-
+ 
 <!-- 首頁 -->
 <section id="home" class="card">
   <div><b>作答模式</b></div>
@@ -70,7 +89,7 @@ input[type=radio],input[type=checkbox]{accent-color:#FF6701}
   <div class="muted" id="wrongInfo"></div>
   <div class="row"><button class="btn alt" id="clearBtn">清除錯題紀錄</button></div>
 </section>
-
+ 
 <!-- 作答 -->
 <section id="quiz" class="card hidden">
   <div class="row" style="margin-top:0"><span class="muted" id="progText"></span><button class="btn alt" id="quitBtn" style="padding:6px 10px">結束</button></div>
@@ -84,7 +103,7 @@ input[type=radio],input[type=checkbox]{accent-color:#FF6701}
     <button class="btn" id="nextBtn" disabled>下一題</button>
   </div>
 </section>
-
+ 
 <!-- 結果 -->
 <section id="result" class="card hidden">
   <div class="muted" style="text-align:center">本次成績</div>
@@ -98,7 +117,7 @@ input[type=radio],input[type=checkbox]{accent-color:#FF6701}
   <div id="reviewList"></div>
 </section>
 </div>
-
+ 
 <script>
 const BANK = [
 [ "如要判斷使用者透過哪個來源 (例如「自然搜尋」或「參照連結網址」等) 前往你的網站，應該使用什麼維度？", ["應該使用網頁標題與畫面類別。","應該使用工作階段來源/媒介。","應該使用 Google Ads 廣告活動。","應該使用工作階段主要管道群組 (預設管道群組)。"], 1, "「工作階段來源/媒介」會記錄每一次造訪是從哪裡來的，例如 google / organic（自然搜尋）、facebook.com / referral（參照連結網址），能直接判斷使用者前往網站的來源，是分析流量來源最基本的維度。「工作階段主要管道群組」是 GA 依來源/媒介規則再歸納出的大分類，屬於彙整後的結果。網頁標題與畫面類別看的是造訪了哪些頁面，Google Ads 廣告活動只涵蓋付費廣告流量，都無法回答使用者從哪個來源進站。" ],
@@ -152,22 +171,22 @@ const BANK = [
 [ "你想查看常見問題解答的現成資訊卡，以便瞭解使用者如何與應用程式或網站互動。你該前往哪個專區才能找到這類資訊卡？", ["可以在「廣告」專區找到這類資訊卡。","可以在「管理」專區找到這類資訊卡。","可以在「探索」專區找到這類資訊卡。","可以在「報表」專區找到這類資訊卡。"], 3, "「報表」專區首頁與報表總覽中，有回答常見問題的現成資訊卡，例如「使用者從哪裡來」、「哪些網頁最多人看」，可以快速了解使用者如何與網站或應用程式互動。「探索」需要自己建立分析；「廣告」和「管理」沒有這類摘要資訊卡。" ],
 [ "你想瞭解已放送的不同廣告如何在轉換路徑上共同運作，因此決定查看「歸因路徑」報表。你可以在 Google Analytics 4 資源中的哪個位置找到這份報表？", ["如要查看報表，請前往「報表」。","如要查看報表，請前往「管理」。","如要查看報表，請前往「廣告」。","如要查看報表，請前往「探索」。"], 2, "「歸因路徑」報表位於「廣告」專區，和模式比較等歸因相關報表放在一起，用來了解不同管道和廣告在轉換路徑上如何共同貢獻。它不在一般的「報表」專區，也不在「探索」或「管理」。" ]
 ];
-
+ 
 const LS_KEY = "ga_quiz_wrong_v1";
 const $ = id => document.getElementById(id);
 const show = (id) => { ["home","quiz","result"].forEach(s => $(s).classList.toggle("hidden", s !== id)); };
 const shuffle = a => { for (let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
 const getWrong = () => { try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; } catch(e){ return []; } };
 const setWrong = arr => { try { localStorage.setItem(LS_KEY, JSON.stringify(arr)); } catch(e){} };
-
+ 
 let session = null;
-
+ 
 function refreshHome(){
   const w = getWrong();
   $("wrongInfo").textContent = w.length ? `目前錯題共 ${w.length} 題` : "目前沒有錯題紀錄";
   $("wrongBtn").disabled = w.length === 0;
 }
-
+ 
 function startSession(ids, mode, randomize){
   if (randomize) shuffle(ids);
   session = {
@@ -179,7 +198,7 @@ function startSession(ids, mode, randomize){
   show("quiz");
   renderQ();
 }
-
+ 
 function renderQ(){
   const s = session, k = s.pos, id = s.ids[k], item = BANK[id], perm = s.perms[k];
   const total = s.ids.length;
@@ -220,7 +239,7 @@ function renderQ(){
   if (!answered && s.mode==="exam") $("nextBtn").disabled = true;
   if (s.mode==="exam" && answered) $("nextBtn").disabled = false;
 }
-
+ 
 function choose(dispIdx){
   const s = session, k = s.pos;
   if (s.answers[k] !== undefined) return;
@@ -228,14 +247,14 @@ function choose(dispIdx){
   if (s.mode === "exam") { renderQ(); $("nextBtn").disabled = false; return; }
   renderQ();
 }
-
+ 
 function nextQ(){
   const s = session;
   if (s.answers[s.pos] === undefined) return;
   if (s.pos < s.ids.length-1) { s.pos++; renderQ(); }
   else finish();
 }
-
+ 
 function finish(){
   const s = session;
   let correct = 0; const wrongIds = getWrong(); const rev = [];
@@ -256,7 +275,7 @@ function finish(){
   $("reviewList").classList.add("hidden");
   show("result");
 }
-
+ 
 function renderReview(){
   const s = session, box = $("reviewList");
   box.innerHTML = "";
@@ -276,7 +295,7 @@ function renderReview(){
   });
   box.classList.remove("hidden");
 }
-
+ 
 $("startBtn").onclick = () => {
   const mode = document.querySelector('input[name=mode]:checked').value;
   const count = parseInt(document.querySelector('input[name=count]:checked').value, 10);
@@ -307,9 +326,26 @@ $("retryBtn").onclick = () => {
 };
 $("reviewBtn").onclick = renderReview;
 $("backBtn").onclick = () => { refreshHome(); show("home"); };
-
+ 
 refreshHome();
 show("home");
+ 
+// 基本防複製（僅為阻擋一般操作，無法防止有心人士檢視原始碼）
+(function(){
+  const block = e => e.preventDefault();
+  ["contextmenu","copy","cut","selectstart","dragstart"].forEach(ev => document.addEventListener(ev, block));
+  document.addEventListener("keydown", e => {
+    const k = (e.key||"").toLowerCase(), ctrl = e.ctrlKey || e.metaKey;
+    if (e.key === "F12" || (ctrl && e.shiftKey && ["i","j","c"].includes(k)) || (ctrl && ["u","s","p","c","x","a"].includes(k))) {
+      e.preventDefault();
+    }
+  });
+  const st = document.createElement("style");
+  st.textContent = "body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}";
+  document.head.appendChild(st);
+})();
 </script>
 </body>
 </html>
+ 
+Claude 已完成回應
