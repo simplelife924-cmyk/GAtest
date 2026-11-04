@@ -6,7 +6,8 @@
 <title>Google Analytics分析模擬考</title>
 <style>
 :root{--bg:#FCECDD;--card:#FFFAF5;--fg:#2B160C;--muted:#8A5A3E;--pri:#FF6701;--pri2:#E25E3E;--soft:#FFC288;--tint:#FFF1E3;--ok:#2F7D4F;--okbg:#EAF5EC;--bad:#C63D2F;--badbg:#FBE3DE;--line:#FFC288}
-*{box-sizing:border-box}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+button:focus:not(:focus-visible){outline:none}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","Microsoft JhengHei",sans-serif;background:radial-gradient(1200px 600px at 100% -10%,#FFBB5C33,transparent 60%),radial-gradient(900px 500px at -10% 110%,#FF9B5033,transparent 60%),var(--bg);background-attachment:fixed;color:var(--fg);line-height:1.6}
 .wrap{max-width:720px;margin:0 auto;padding:16px}
@@ -15,12 +16,13 @@ h1{font-size:1.3rem;margin:0;background:linear-gradient(90deg,#C63D2F,#FF6701 55
 .card{min-width:0;overflow-wrap:anywhere;background:var(--card);border-radius:14px;padding:18px;box-shadow:0 10px 30px -12px rgba(198,61,47,.25);border:1px solid #FFC28866;margin-top:14px}
 .muted{color:var(--muted);font-size:.9rem}
 .btn{display:inline-block;border:0;border-radius:10px;padding:.7em 1em;font-size:1rem;max-width:100%;white-space:normal;overflow-wrap:anywhere;line-height:1.35;cursor:pointer;background:linear-gradient(135deg,#FF6701,#E25E3E);color:#fff;margin:4px 4px 4px 0;box-shadow:0 6px 16px -6px rgba(255,103,1,.55);transition:transform .15s,box-shadow .15s}
-.btn:not(:disabled):hover{transform:translateY(-1px);box-shadow:0 10px 22px -8px rgba(255,103,1,.65)}
+@media (hover:hover){.btn:not(:disabled):hover{transform:translateY(-1px);box-shadow:0 10px 22px -8px rgba(255,103,1,.65)}}
 .btn.alt{background:var(--tint);color:#C63D2F;box-shadow:none;border:1px solid #FFC288}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 .btn.block{display:block;width:100%;text-align:left}
 .opt{display:block;width:100%;text-align:left;background:var(--card);border:2px solid var(--line);border-radius:10px;padding:.8em .9em;margin:8px 0;line-height:1.45;overflow-wrap:anywhere;font-size:1rem;cursor:pointer;color:var(--fg)}
-.opt:hover{border-color:#FF9B50;background:var(--tint)}
+.opt.static{cursor:default}
+@media (hover:hover){.opt:not(.static):not(:disabled):hover{border-color:#FF9B50;background:var(--tint)}}
 .opt.sel{border-color:var(--pri);background:#FFE3CC}
 .opt.right{border-color:var(--ok);background:var(--okbg)}
 .opt.wrong{border-color:var(--bad);background:var(--badbg)}
@@ -129,10 +131,10 @@ const BANK = [
 [ "使用者觀看影片時，會在你的網站上觸發事件。以下何者是事件參數？", ["在網站上觀看影片的使用者人數","在網站上觀看的影片名稱","使用者在網站上觀看影片時所用的裝置","有多少使用者點開影片所在的網頁"], 1, "事件參數是附加在事件上、補充說明這次事件的細節。以影片事件來說，「觀看的影片名稱」就是這次事件的參數。觀看人數和點開網頁的人數是指標；使用者所用的裝置是 GA 自動收集的裝置維度，不是這個影片事件本身的參數。" ],
 [ "以下哪項描述符合 Google Analytics 與 Google Ads 完成連結後，Google Analytics 轉換事件在 Google Ads 中的使用方式？", ["Google Ads 可運用轉換事件調整和改善廣告文案。","Google Ads 可運用轉換事件改善廣告刊登位置的出價。","Google Ads 可運用轉換事件建立新的關鍵字提案。","Google Ads 可運用轉換事件呈現業界基準化資料。"], 1, "GA 與 Google Ads 連結後，可以把 GA 的重要事件（轉換）匯入 Google Ads。智慧出價就能根據這些轉換資料調整出價，讓廣告在更可能帶來轉換的競價中出更合適的價格。GA 轉換不會用來改寫廣告文案、產生關鍵字提案或提供業界基準資料。" ],
 [ "如果想深入瞭解哪些自然搜尋查詢會將使用者帶往你的網站，該將哪個平台連結至 Analytics？", ["Search Ads 360","Firebase","Google Ads","Search Console"], 3, "Search Console 提供 Google 自然搜尋的查詢字詞、曝光、點擊和平均排名。連結到 GA 後，就能看到哪些自然搜尋查詢帶來網站流量，以及這些使用者後續的行為。Search Ads 360 和 Google Ads 是付費廣告平台；Firebase 是應用程式開發平台。" ],
-[ "你想要針對標準表格報表中的資料進行深入的細項分析，你該選取哪項功能？", ["選取「細目」。", "選取「次要維度」。", "選取「比較項目」。", "選取「篩選器」。"], 0, "「細目」可以針對標準表格報表中的資料進行深入的細項分析，是本題的正確答案。「次要維度」是在主要維度旁加上另一個維度來細分資料；「比較項目」是並列多組資料；「篩選器」是只保留符合條件的資料，用途各不相同。"],
+[ "你想要針對標準表格報表中的資料進行深入的細項分析，你該選取哪項功能？", ["選取「細目」。", "選取「次要維度」。", "選取「比較項目」。", "選取「篩選器」。"], 0, "依教材答案，「細目」可以針對標準表格報表中的資料進行深入的細項分析。「次要維度」是在主要維度旁加上另一個維度來細分資料；「比較項目」是並列多組資料；「篩選器」是只保留符合條件的資料。"],
 [ "為了瞭解來自電腦或手機等裝置的使用者人數，你製作了一份報表，列出過去 30 天各裝置類型的人數資料。在這份報表中，裝置類型是什麼？", ["維度","使用者","事件","指標"], 0, "裝置類型（電腦、手機、平板）是用來分類資料的屬性，所以是「維度」。使用者人數是用來計算的數字，屬於「指標」。記法：維度回答「是什麼」，指標回答「有多少」。" ],
-[ "當你想確定使用者在產品詳細資料頁面上的行為，是否會因為裝置類型而有所不同時，應該提取哪種報表？", ["應該提取「網頁和畫面」報表。", "應該提取「事件」報表。", "應該提取「技術詳情」報表。", "應該提取「獲取新客」報表。"], 2, "依附圖教材，本題答案為「技術詳情」報表，該報表可以依裝置、瀏覽器與作業系統等技術資訊比較使用者的差異。「網頁和畫面」報表雖然以頁面為主，但本題以附圖答案為準；「事件」與「獲取新客」報表則不以產品頁面的裝置差異為分析重點。"],
-[ "你打算建立資訊主頁，以檢視分析資料及其他業務應用程式中的店內顧客購買資料。此時該使用 Google Analytics 的哪項功能？", ["Admin API", "Data API", "Measurement Protocol", "Firebase SDK"], 3, "Firebase 專用於應用程式，其中的 Firebase Analytics 演變成今日的 GA4，可以先使用 Firebase 收集資料，再與 GA4 關聯，因此本題選擇 Firebase SDK。Admin API 用來以程式管理帳戶與資源設定；Data API 用來讀取 GA 報表資料；Measurement Protocol 用來把事件直接送進 GA。"],
+[ "當你想確定使用者在產品詳細資料頁面上的行為，是否會因為裝置類型而有所不同時，應該提取哪種報表？", ["應該提取「網頁和畫面」報表。", "應該提取「事件」報表。", "應該提取「技術詳情」報表。", "應該提取「獲取新客」報表。"], 2, "依教材答案，本題選擇「技術詳情」報表，可依裝置、瀏覽器、作業系統等技術資訊比較使用者的差異。「網頁和畫面」報表以頁面為主；「事件」與「獲取新客」報表則不以產品頁面的裝置差異為分析重點。"],
+[ "你打算建立資訊主頁，以檢視分析資料及其他業務應用程式中的店內顧客購買資料。此時該使用 Google Analytics 的哪項功能？", ["Admin API", "Data API", "Measurement Protocol", "Firebase SDK"], 3, "依教材答案，Firebase 專用於應用程式，其中的 Firebase Analytics 演變成今日的 GA4，可以先用 Firebase 收集資料，再與 GA4 關聯，因此選 Firebase SDK。Admin API 用來管理帳戶與資源設定；Data API 用來讀取報表資料；Measurement Protocol 用來把事件送進 GA。"],
 [ "使用者會透過搜尋引擎結果和社群媒體等多種管道，找出並造訪你的網站。你可以透過 Google Analytics「報表」頁面的哪個部分，進一步瞭解使用者是從哪裡造訪網站？", ["參與度","客層","獲客","營利"], 2, "「獲客」區塊（包含獲取新客和流量開發報表）專門說明使用者是從哪些管道來到網站，例如搜尋引擎、社群媒體或廣告。參與度看使用者造訪後做了什麼；客層看使用者是誰；營利看收益和購買。" ],
 [ "每當有網站訪客在你的網站上瀏覽網頁時，就會觸發 page_view 事件，但你的團隊想定義會在訪客進入特定網頁 (例如首頁) 時觸發的新事件。那麼在 Google Analytics 介面中前往「事件」後，他們該選擇哪個選項？", ["應該選擇「標示為重要事件」。","應該選擇「修改事件」。","應該選擇「建立事件」。","應該選擇「匯入事件」。"], 2, "要依照既有的 page_view 事件和條件（例如網頁位置等於首頁）定義一個全新的事件，應該在「事件」中選擇「建立事件」。「修改事件」是更改已經存在的事件；「標示為重要事件」是把事件設成轉換；「匯入事件」不是這個介面的操作。" ],
 [ "如要將 Google Analytics 資源連結至 BigQuery，選擇資料的匯出頻率時會看到兩個選項，分別是？", ["兩個選項分別為「每小時」和「串流」。","兩個選項分別為「每日」和「每週」。","兩個選項分別為「每日」和「串流」。","兩個選項分別為「每週」和「串流」"], 2, "GA 連結 BigQuery 時，匯出頻率有兩種：「每日」（每天匯出一次完整資料）和「串流」（幾分鐘內即時匯出）。每小時或每週都不是可選的頻率。" ],
@@ -169,13 +171,11 @@ function refreshHome(){
   $("wrongBtn").disabled = w.length === 0;
 }
 
-function startSession(ids, mode, randomize){
-  if (randomize) shuffle(ids);
+function startSession(ids, mode, shuffleOptions){
   session = {
     mode, ids,
-    perms: ids.map(id => { const p=[0,1,2,3]; return randomize ? shuffle(p) : p; }),
-    pos: 0, answers: [], // answers[k] = chosen display index
-    results: []          // per question: {id, chosen, correct(bool)}
+    perms: ids.map(() => { const p=[0,1,2,3]; return shuffleOptions ? shuffle(p) : p; }),
+    pos: 0, answers: []
   };
   show("quiz");
   renderQ();
@@ -288,13 +288,14 @@ $("startBtn").onclick = () => {
   let ids = BANK.map((_,i)=>i);
   if (rnd) shuffle(ids);
   ids = ids.slice(0, count);
-  startSession(ids, mode, false);
+  startSession(ids, mode, rnd);
 };
 $("wrongBtn").onclick = () => {
   const mode = document.querySelector('input[name=mode]:checked').value;
   const ids = getWrong().filter(i => i>=0 && i<BANK.length);
   if (!ids.length) return;
-  startSession(ids.slice(), mode, $("shuffle").checked);
+  const rnd = $("shuffle").checked;
+  startSession(rnd ? shuffle(ids.slice()) : ids.slice(), mode, rnd);
 };
 $("clearBtn").onclick = () => { setWrong([]); refreshHome(); };
 $("nextBtn").onclick = nextQ;
